@@ -8,14 +8,12 @@
 
 // Generate a Deme of the specified size with all-random chromosomes.
 // Also receives a mutation rate in the range [0-1].
-Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate)
-{
+Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate){
 	// Add your implementation here
 }
 
 // Clean up as necessary
-Deme::~Deme()
-{
+Deme::~Deme(){
 	// Add your implementation here
 }
 
@@ -26,20 +24,17 @@ Deme::~Deme()
 // Then, the pair is recombined once (using the recombine() method) to generate
 // a new pair of chromosomes, which are stored in the Deme.
 // After we've generated pop_size new chromosomes, we delete all the old ones.
-void Deme::compute_next_generation()
-{
+void Deme::compute_next_generation(){
 	// Add your implementation here
 }
 
 // Return a copy of the chromosome with the highest fitness.
-const Chromosome* Deme::get_best() const
-{
+const Chromosome* Deme::get_best() const{
 	// Add your implementation here
 }
 
 // Randomly select a chromosome in the population based on fitness and
 // return a pointer to that chromosome.
-Chromosome* Deme::select_parent()
-{
+Chromosome* Deme::select_parent(){
 	// Add your implementation here
 }
