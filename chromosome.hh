@@ -12,6 +12,8 @@
 
 #include "cities.hh"
 #include <random>
+#include <vector>
+#include <utility>
 
 class Chromosome {
    // Disable public copying of objects for polymorphism:
@@ -83,5 +85,8 @@ class Chromosome {
   const Cities* cities_ptr_; // Keep ptr to cities, no need for full copy
   Cities::permutation_t order_;  // The actual permutation of this chromosome
 
-  std::default_random_engine generator_; // A random number generator for the various methods
+  static std::default_random_engine generator_; // A random number generator for the various methods
+  std::uniform_int_distribution<unsigned int> distribution_ (0, order_.size());
+
+  std::vector<std::pair<Chromosome*, Chromosome*>> offsprings_;
 };

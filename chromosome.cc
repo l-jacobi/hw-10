@@ -4,9 +4,12 @@
 
 #include <algorithm>
 #include <cassert>
-#include <random>
 
 #include "chromosome.hh"
+
+using namespace std;
+
+Cities::permutation_t range(unsigned int num); //helper function to find the range of a number
 
 //////////////////////////////////////////////////////////////////////////////
 // Generate a completely random permutation from a list of cities
@@ -23,6 +26,12 @@ Chromosome::Chromosome(const Cities* cities_ptr)
 Chromosome::~Chromosome()
 {
   assert(is_valid());
+  if(!(offsprings_.empty())){
+    for(auto offspring: offsprings_){
+      delete offspring.first;
+      delete offspring.second;
+    }
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -30,21 +39,28 @@ Chromosome::~Chromosome()
 void
 Chromosome::mutate()
 {
-  // Add your implementation here
-
   assert(is_valid());
+  unsigned pos1 = distribution_(generator_);
+  unsigned pos2 = distribution_(generator_);
+  swap (order_[pos1], order_[pos2]);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // Return a pair of offsprings by recombining with another chromosome
 // Note: this method allocates memory for the new offsprings
-std::pair<Chromosome*, Chromosome*>
+pair<Chromosome*, Chromosome*>
 Chromosome::recombine(const Chromosome* other)
 {
   assert(is_valid());
   assert(other->is_valid());
 
-  // Add your implementation here
+  unsigned b = distribution_(generator_), e = distribution_(generator_);
+  auto child_1 = create_crossover_child(this, other, b, e);
+  unsigned b = distribution_(generator_), e = distribution_(generator_);
+  auto child_2 = create_crossover_child(this, other, b, e);
+  pair<Chromosome*, Chromosome*>(child_1, child_2) offspring;
+  offsprings_.push_back(offspring);
+  return offspring;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,7 +71,7 @@ Chromosome*
 Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
                                    unsigned b, unsigned e) const
 {
-  Chromosome* child = p1->clone();
+  Chromosome* child = p1->clone(); //this is where new memory is allocated
 
   // We iterate over both parents separately, copying from parent1 if the
   // value is within [b,e) and from parent2 otherwise
@@ -84,16 +100,20 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
 double
 Chromosome::get_fitness() const
 {
-  // Add your implementation here
+  double dist = calculate_total_distance();
+  assert(dist > 0);
+  return(1 / dist); //smaller the distance is, the larger its fitness will be
 }
 
-// A chromsome is valid if it has no repeated values in its permutation,
+// A Chromosome is valid if it has no repeated values in its permutation,
 // as well as no indices above the range (length) of the chromosome.
 // We implement this check with a sort, which is a bit inefficient, but simple
 bool
 Chromosome::is_valid() const
 {
-  // Add your implementation here
+  auto copy = order_;
+  sort(copy.begin(), copy.end());
+  return (copy == range(order_.size()));
 }
 
 // Find whether a certain value appears in a given range of the chromosome.
@@ -102,5 +122,17 @@ Chromosome::is_valid() const
 bool
 Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
-  // Add your implementation here
+  assert(end < order_.size());
+  for(unsigned i = begin; i <= end; ++i){
+    if(order_[i] == value) { return true; }
+  }
+  return false;
+}
+
+Cities::permutation_t range(unsigned int num) //helper function
+{
+  assert(int(num) >= 0);
+  Cities::permutation_t v;
+  for(int i = 0; i <= num; ++i){ v.push_back(i); }
+  return v;
 }
