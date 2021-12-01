@@ -21,7 +21,7 @@ class Chromosome {
   Chromosome& operator=(Chromosome&&) = delete;
 
  public:
-  // Creation method for new Chromsomoe. Saves a copy of the cities and
+  // Creation method for new Chromosome. Saves a copy of the cities and
   // generates a completely random permutation from a list of cities.
   Chromosome(const Cities*);
 
