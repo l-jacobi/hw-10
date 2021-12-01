@@ -12,4 +12,4 @@ tsp: tsp.o chromosome.o deme.o cities.o
 	$(CXX) $(CXXFLAGS) $(OPTFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf *.o tsp
+	rm -rf *.o *.out tsp
