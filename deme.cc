@@ -8,6 +8,8 @@
 #include <algorithm>
 //#include <numeric>
 
+using vec_size_t = std::vector<Chromosome*>::size_type;
+
 Chromosome* mut_decider(std::default_random_engine& generator, Chromosome* chromosome_ptr, double mut_rate){
 	if(generator.max() / generator() < mut_rate){
 		chromosome_ptr->mutate();
@@ -43,7 +45,7 @@ Deme::~Deme(){
 // a new pair of chromosomes, which are stored in the Deme.
 // After we've generated pop_size new chromosomes, we delete all the old ones.
 void Deme::compute_next_generation(){
-	for(auto i = 0; i <= pop_.size() / 2; ++i){
+	for(vec_size_t i = 0; i <= pop_.size() / 2; ++i){
 		Chromosome* parent_1 = mut_decider(generator_, select_parent(), mut_rate_);
 		Chromosome* parent_2 = mut_decider(generator_, select_parent(), mut_rate_);
 
@@ -65,7 +67,7 @@ const Chromosome* Deme::get_best() const{
 	//for(chromosome_ptr_t chromosome_ptr : pop_){ //more spicy code i can't use
 	if(pop_.size() > 1){
 		double best_fitness = best->get_fitness();	//saves on computing the fitness of the current best option every time they're compared later
-		for(auto i = 1; i < pop_.size(); ++i){	//is it faster to assign pop_.size() to a variable so i don't have to access it like this? i checked the implementation for vectors and it's calculated by subtraction of the begin and end iterators
+		for(vec_size_t i = 1; i < pop_.size(); ++i){	//is it faster to assign pop_.size() to a variable so i don't have to access it like this? i checked the implementation for vectors and it's calculated by subtraction of the begin and end iterators
 			if(pop_[i]->get_fitness() > best_fitness){
 				best = pop_[i];
 				best_fitness = best->get_fitness();
@@ -80,7 +82,7 @@ const Chromosome* Deme::get_best() const{
 Chromosome* Deme::select_parent(){
 	std::vector<int> fps_table(pop_.size());	//table for fitness proportionate selection
 	fps_table[0] = pop_[0]->get_fitness();	//initialize first value as fitness of first cromosome
-	for(int i = 1; i < int(pop_.size()); ++i){
+	for(vec_size_t i = 1; i < pop_.size(); ++i){
 		fps_table[i] = fps_table[i-1] + pop_[i]->get_fitness();	//each chromosome "takes up" the amount of "space" proportionate to their fitness
 	}
 
