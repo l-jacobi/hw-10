@@ -34,7 +34,23 @@ Deme::~Deme(){
 // a new pair of chromosomes, which are stored in the Deme.
 // After we've generated pop_size new chromosomes, we delete all the old ones.
 void Deme::compute_next_generation(){
-	// Add your implementation here
+	for(int i = 0; i <= pop_.size() / 2; ++i){
+		Chromosome* parent_1 = mut_decider(generator_, select_parent(), mut_rate_);
+		Chromosome* parent_2 = mut_decider(generator_, select_parent(), mut_rate_);
+
+		std::pair<Chromosome*, Chromosome*> children = parent_1->recombine(parent_2);
+		delete parent_1;
+		delete parent_2;
+		parent_1 = children.first;
+		parent_2 = children.second;
+	}
+}
+
+Chromosome* mut_decider(std::default_random_engine& generator, Chromosome* chromosome_ptr, double mut_rate){
+	if(generator.max() / generator() < mut_rate){
+		chromosome_ptr->mutate();
+	}
+	return chromosome_ptr;
 }
 
 // Return a copy of the chromosome with the highest fitness.
