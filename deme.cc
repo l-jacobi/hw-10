@@ -12,20 +12,18 @@
 // Also receives a mutation rate in the range [0-1].
 Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate){
 	for(int i = 0; i < pop_size; ++i){
-		//Chromosome* chromosome_ptr = new Chromosome(cities_ptr);
-		//pop_.push_back(chromosome_ptr);
-		pop_.push_back(std::make_shared<Chromosome>(cities_ptr));
+		Chromosome* chromosome_ptr = new Chromosome(cities_ptr);
+		pop_.push_back(chromosome_ptr);
+		//pop_.push_back(std::make_shared<Chromosome>(cities_ptr));
 		mut_rate_ = mut_rate;
 	}
 }
 
 // Clean up as necessary
 Deme::~Deme(){
-	/*
-	for(chromosome : pop_){
-		delete chromosome;
+	for(Chromosome* chromosome_ptr : pop_){
+		delete chromosome_ptr;
 	}
-	*/
 }
 
 // Evolve a single generation of new chromosomes, as follows:
@@ -41,11 +39,11 @@ void Deme::compute_next_generation(){
 
 // Return a copy of the chromosome with the highest fitness.
 // ^ This is literally impossible, the chromosome.hh implementation we were given deletes the copy and assignment constructor. I'm going with the moodle instructions, which say to return a pointer to the best chromosome.
-const Deme::chromosome_ptr_t Deme::get_best() const{
+const Chromosome* Deme::get_best() const{
 	//return std::max_element(/*construct an array of the get_fitness of eawch element of pop_*/)
 	//not sure if this ^ would be faster or slower; I'll compare later if I have time
 	
-	chromosome_ptr_t ret = pop_[0];
+	Chromosome* ret = pop_[0];
 	//for(chromosome_ptr_t chromosome_ptr : pop_){ //more spicy code i can't use
 	if(pop_.size() > 1){
 		double current_fitness = ret->get_fitness();	//saves on computing the fitness of the current best option every time they're compared later
@@ -61,7 +59,7 @@ const Deme::chromosome_ptr_t Deme::get_best() const{
 
 // Randomly select a chromosome in the population based on fitness and
 // return a pointer to that chromosome.
-Deme::chromosome_ptr_t Deme::select_parent(){
+Chromosome* Deme::select_parent(){
 	std::vector<int> fps_table(pop_.size());	//table for fitness proportionate selection
 	fps_table[0] = pop_[0]->get_fitness();	//initialize first value as fitness of first cromosome
 	for(int i = 1; i < pop_.size(); ++i){
