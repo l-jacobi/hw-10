@@ -132,6 +132,6 @@ Cities::permutation_t range(int num) //helper function
 {
   assert(num >= 0);
   Cities::permutation_t v;
-  for(int i = 0; i <= num; ++i){ v.push_back(i); }
+  for(int i = 0; i < num; ++i){ v.push_back(i); }
   return v;
 }
