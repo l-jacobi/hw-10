@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <random>
 
 #include "chromosome.hh"
 
@@ -15,8 +16,8 @@ Cities::permutation_t range(unsigned int num); //helper function to find the ran
 // Generate a completely random permutation from a list of cities
 Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
-    order_(random_permutation(cities_ptr->size())),
-    generator_(rand())
+    order_(random_permutation(cities_ptr->size()))/*,
+    generator_(rand())*/
 {
   assert(is_valid());
 }
@@ -26,12 +27,6 @@ Chromosome::Chromosome(const Cities* cities_ptr)
 Chromosome::~Chromosome()
 {
   assert(is_valid());
-  if(!(offsprings_.empty())){
-    for(auto offspring: offsprings_){
-      delete offspring.first;
-      delete offspring.second;
-    }
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -40,8 +35,9 @@ void
 Chromosome::mutate()
 {
   assert(is_valid());
-  unsigned pos1 = distribution_(generator_);
-  unsigned pos2 = distribution_(generator_);
+  uniform_int_distribution<int> distribution(0, get_ordering().size());
+  unsigned pos1 = distribution(generator_);
+  unsigned pos2 = distribution(generator_);
   swap (order_[pos1], order_[pos2]);
 }
 
@@ -54,12 +50,12 @@ Chromosome::recombine(const Chromosome* other)
   assert(is_valid());
   assert(other->is_valid());
 
-  unsigned b = distribution_(generator_), e = distribution_(generator_);
+  uniform_int_distribution<int> distribution(0, get_ordering().size());
+  int b = distribution(generator_), e = distribution(generator_);
   auto child_1 = create_crossover_child(this, other, b, e);
-  unsigned b = distribution_(generator_), e = distribution_(generator_);
-  auto child_2 = create_crossover_child(this, other, b, e);
-  pair<Chromosome*, Chromosome*>(child_1, child_2) offspring;
-  offsprings_.push_back(offspring);
+  int c = distribution(generator_), f = distribution(generator_);
+  auto child_2 = create_crossover_child(this, other, c, f);
+  pair<Chromosome*, Chromosome*> offspring (child_1, child_2);
   return offspring;
 }
 
