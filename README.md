@@ -1,5 +1,8 @@
 # hw-10
 
+Rebecca: Chromosome class
+==============
+
 :(
 
 El: Deme class
