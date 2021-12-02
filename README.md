@@ -1,3 +1,8 @@
 # hw-10
 
-This assignment is not finished. If you're reading this, that means I forgot to push. Oops.
+This assignment is not yet finished; Rebecca is very sick and asked Eitan for an extension.
+
+El: Deme class
+==============
+
+I could've manually managed memory in the `deme` constructor/destructor, but valgrind never likes that and so I decided to just start by changing the `pop_` member to be a vector of shared pointers rather than pointers. If this comes back to bite me later, oof. I don't think it should though. Also this might be helpful if during one of the methods i delete members from the population prematurely, though idk.
