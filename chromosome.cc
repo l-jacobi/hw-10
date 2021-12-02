@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Cities::permutation_t range(unsigned int num); //helper function to find the range of a number
+Cities::permutation_t range(int num); //helper function to find the range of a number
 
 //////////////////////////////////////////////////////////////////////////////
 // Generate a completely random permutation from a list of cities
@@ -36,8 +36,9 @@ Chromosome::mutate()
 {
   assert(is_valid());
   uniform_int_distribution<int> distribution(0, get_ordering().size());
-  unsigned pos1 = distribution(generator_);
-  unsigned pos2 = distribution(generator_);
+  default_random_engine generator(rand());
+  unsigned pos1 = distribution(generator);
+  unsigned pos2 = distribution(generator);
   swap (order_[pos1], order_[pos2]);
 }
 
@@ -51,10 +52,12 @@ Chromosome::recombine(const Chromosome* other)
   assert(other->is_valid());
 
   uniform_int_distribution<int> distribution(0, get_ordering().size());
-  int b = distribution(generator_), e = distribution(generator_);
-  auto child_1 = create_crossover_child(this, other, b, e);
-  int c = distribution(generator_), f = distribution(generator_);
-  auto child_2 = create_crossover_child(this, other, c, f);
+  default_random_engine generator(rand());
+
+  int a = distribution(generator), b = distribution(generator);
+  auto child_1 = create_crossover_child(this, other, a, b);
+  int c = distribution(generator), d = distribution(generator);
+  auto child_2 = create_crossover_child(this, other, c, d);
   pair<Chromosome*, Chromosome*> offspring (child_1, child_2);
   return offspring;
 }
@@ -125,9 +128,9 @@ Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
   return false;
 }
 
-Cities::permutation_t range(unsigned int num) //helper function
+Cities::permutation_t range(int num) //helper function
 {
-  assert(int(num) >= 0);
+  assert(num >= 0);
   Cities::permutation_t v;
   for(int i = 0; i <= num; ++i){ v.push_back(i); }
   return v;
