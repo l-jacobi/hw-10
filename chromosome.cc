@@ -77,7 +77,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
   unsigned i = 0, j = 0;
 
   for ( ; i < p1->order_.size() && j < p2->order_.size(); ++i) {
-    if (i >= b and i < e) {
+    if (i >= b && i < e) {
       child->order_[i] = p1->order_[i];
     }
     else { // Increment j as long as its value is in the [b,e) range of p1
