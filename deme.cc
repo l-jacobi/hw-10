@@ -92,5 +92,5 @@ Chromosome* Deme::select_parent(){
 		++i;
 	}
 	++i;	// sets i to the first chromosome with a fitness space larger than the random number
-	return pop_[i];
+	return pop_[i]; 
 }
