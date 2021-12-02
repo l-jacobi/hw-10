@@ -1,6 +1,6 @@
 # hw-10
 
-This assignment is not yet finished; Rebecca is very sick and asked Eitan for an extension.
+:(
 
 El: Deme class
 ==============
