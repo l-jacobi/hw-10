@@ -14,6 +14,7 @@
 #include <random>
 #include <vector>
 #include <utility>
+#include <iostream>
 
 class Chromosome {
    // Disable public copying of objects for polymorphism:
@@ -25,7 +26,7 @@ class Chromosome {
  public:
   // Creation method for new Chromosome. Saves a copy of the cities and
   // generates a completely random permutation from a list of cities.
-  Chromosome(const Cities*);
+  Chromosome(const Cities* cities_ptr);
 
   // Polymorphic creation method from an existing Chromosome.
   // This method allocates memory for the newly created chromosome.
@@ -63,6 +64,8 @@ class Chromosome {
     return order_;
   }
 
+  int get_order_size() { return order_.size(); } 
+
  protected:
   // For an ordered set of parents, return a child using the ordered crossover.
   // The child will have the same values as p1 in the range [begin,end),
@@ -86,7 +89,5 @@ class Chromosome {
   Cities::permutation_t order_;  // The actual permutation of this chromosome
 
   static std::default_random_engine generator_; // A random number generator for the various methods
-  std::uniform_int_distribution<unsigned int> distribution_ (0, order_.size());
 
-  std::vector<std::pair<Chromosome*, Chromosome*>> offsprings_;
 };

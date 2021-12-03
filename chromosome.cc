@@ -4,12 +4,13 @@
 
 #include <algorithm>
 #include <cassert>
+#include <random>
 
 #include "chromosome.hh"
 
 using namespace std;
 
-Cities::permutation_t range(unsigned int num); //helper function to find the range of a number
+Cities::permutation_t range(int num); //helper function to find the range of a number
 
 //////////////////////////////////////////////////////////////////////////////
 // Generate a completely random permutation from a list of cities
@@ -26,12 +27,6 @@ Chromosome::Chromosome(const Cities* cities_ptr)
 Chromosome::~Chromosome()
 {
   assert(is_valid());
-  if(!(offsprings_.empty())){
-    for(auto offspring: offsprings_){
-      delete offspring.first;
-      delete offspring.second;
-    }
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -40,8 +35,9 @@ void
 Chromosome::mutate()
 {
   assert(is_valid());
-  unsigned pos1 = distribution_(generator_);
-  unsigned pos2 = distribution_(generator_);
+
+  unsigned pos1 = generator_() % order_.size();
+  unsigned pos2 = generator_() % order_.size();
   swap (order_[pos1], order_[pos2]);
 }
 
@@ -54,12 +50,12 @@ Chromosome::recombine(const Chromosome* other)
   assert(is_valid());
   assert(other->is_valid());
 
-  unsigned b = distribution_(generator_), e = distribution_(generator_);
-  auto child_1 = create_crossover_child(this, other, b, e);
-  unsigned b = distribution_(generator_), e = distribution_(generator_);
-  auto child_2 = create_crossover_child(this, other, b, e);
-  pair<Chromosome*, Chromosome*>(child_1, child_2) offspring;
-  offsprings_.push_back(offspring);
+  using gen1 = generator_() % order_.size();
+  using gen2 = generator_() % other->get_order_size;
+
+  auto child_1 = create_crossover_child(this, other, gen1, gen1);
+  auto child_1 = create_crossover_child(this, other, gen2, gen2);
+  pair<Chromosome*, Chromosome*> offspring (child_1, child_2);
   return offspring;
 }
 
@@ -78,7 +74,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
   unsigned i = 0, j = 0;
 
   for ( ; i < p1->order_.size() && j < p2->order_.size(); ++i) {
-    if (i >= b and i < e) {
+    if (i >= b && i < e) {
       child->order_[i] = p1->order_[i];
     }
     else { // Increment j as long as its value is in the [b,e) range of p1
@@ -129,10 +125,10 @@ Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
   return false;
 }
 
-Cities::permutation_t range(unsigned int num) //helper function
+Cities::permutation_t range(int num) //helper function
 {
-  assert(int(num) >= 0);
+  assert(num >= 0);
   Cities::permutation_t v;
-  for(int i = 0; i <= num; ++i){ v.push_back(i); }
+  for(int i = 0; i < num; ++i){ v.push_back(i); }
   return v;
 }

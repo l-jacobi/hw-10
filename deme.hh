@@ -12,6 +12,8 @@
 
 class Deme {
 	public:
+		//using chromosome_ptr_t = std::shared_ptr<Chromosome>;
+
 		// Generate a Deme of the specified size with all-random chromosomes.
 		// Also receives a mutation rate in the range [0-1].
 		Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate);
@@ -35,6 +37,7 @@ class Deme {
 		// Randomly select a chromosome in the population based on fitness and
 		// return a pointer to that chromosome.
 		virtual Chromosome* select_parent();
+
 
 		std::vector<Chromosome*> pop_;  // Population of Chromosomes
 		double mut_rate_;  // Mutation rate (fraction in range [0,1])

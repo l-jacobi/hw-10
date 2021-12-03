@@ -39,7 +39,7 @@ Cities::reorder(const permutation_t& ordering) const
 // For a given permutation of the cities in this object,
 // compute how long (distance) it would take to traverse all the cities in the
 // order of the permutation, and then returning to the first city.
-// The distance between any two cities is computed as the Euclidean 
+// The distance between any two cities is computed as the Euclidean
 // distance on a plane between their coordinates.
 double
 Cities::total_path_distance(const permutation_t& ord) const
@@ -83,14 +83,18 @@ std::ostream& operator<<(std::ostream& os, const Cities& cities)
 Cities::permutation_t
 random_permutation(unsigned len)
 {
-  Cities::permutation_t ret(len);
-  std::iota(ret.begin(), ret.end(), 0);
-
-  static std::random_device rd;  // Static so we don't initialize every time
-  static std::mt19937 g(rd());
-
-  std::shuffle(ret.begin(), ret.end(), g);
-  return ret;
+  assert(int(len) > 0);
+  Cities::permutation_t out;
+  int end = len-1;
+  //following 2 lines borrowed from a StackOverflow user: see README
+  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+  static default_random_engine generator (seed);
+  uniform_int_distribution<unsigned int> distribution(0, end);
+  while(out.size() != len){
+    auto num = distribution(generator);
+    if(count(out.begin(), out.end(), num) == 0){
+      out.push_back(num);
+    }
+  }
+  return out;
 }
-
-
