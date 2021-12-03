@@ -20,11 +20,6 @@ Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
     order_(random_permutation(cities_ptr->size()))
 {
-  std::cout << std::endl << "chromosome initialized, city order: ";
-  for(unsigned int i : order_){
-	  std:: cout << i << ", ";
-  }
-  std::cout << std::endl;
   std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
   generator_ = generator;
   assert(is_valid());
@@ -41,7 +36,7 @@ Chromosome::~Chromosome()
 // Perform a single mutation on this chromosome
 void
 Chromosome::mutate()
-{	std::cout << std::endl << "####mutating" << std::endl;
+{
   assert(is_valid());
 
   unsigned pos1 = generator_() % order_.size();
@@ -54,7 +49,7 @@ Chromosome::mutate()
 // Note: this method allocates memory for the new offsprings
 pair<Chromosome*, Chromosome*>
 Chromosome::recombine(const Chromosome* other)
-{	std::cout << std::endl << "####recombining" << std::endl;
+{
   assert(is_valid());
   assert(other->is_valid());
 
@@ -89,7 +84,6 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
       while (p1->is_in_range(p2->order_[j], b, e)) {
         ++j;
       }
-//	  std::cout << "j: " << j << ", p2->order_.size(): " << p2->order_.size() << std::endl;
       assert(j < p2->order_.size());
       child->order_[i] = p2->order_[j];
       j++;
