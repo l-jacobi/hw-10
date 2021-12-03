@@ -38,11 +38,7 @@ class Deme {
 		// return a pointer to that chromosome.
 		virtual Chromosome* select_parent();
 
-<<<<<<< HEAD
-
-=======
 		
->>>>>>> c150d686d669d8c659f44e2dd5f27d4d3e066813
 		std::vector<Chromosome*> pop_;  // Population of Chromosomes
 		double mut_rate_;  // Mutation rate (fraction in range [0,1])
 
