@@ -59,7 +59,7 @@ Chromosome::recombine(const Chromosome* other)
   //using gen2 = generator_() % other->get_order_size();
 
   auto child_1 = create_crossover_child(this, other, generator_() % order_.size(), generator_() % order_.size());
-  auto child_2 = create_crossover_child(this, other, generator_() % other->get_order_size, generator_() % other->get_order_size);
+  auto child_2 = create_crossover_child(this, other, generator_() % other->get_order_size(), generator_() % other->get_order_size());
   pair<Chromosome*, Chromosome*> offspring (child_1, child_2);
   return offspring;
 }
