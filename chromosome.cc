@@ -16,8 +16,8 @@ Cities::permutation_t range(int num); //helper function to find the range of a n
 // Generate a completely random permutation from a list of cities
 Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
-    order_(random_permutation(cities_ptr->size()))/*,
-    generator_(rand())*/
+    order_(random_permutation(cities_ptr->size())),
+    generator_(rand())
 {
   assert(is_valid());
 }
@@ -35,10 +35,9 @@ void
 Chromosome::mutate()
 {
   assert(is_valid());
-  uniform_int_distribution<int> distribution(0, get_ordering().size());
-  default_random_engine generator(rand());
-  unsigned pos1 = distribution(generator);
-  unsigned pos2 = distribution(generator);
+
+  unsigned pos1 = generator_();
+  unsigned pos2 = generator_();
   swap (order_[pos1], order_[pos2]);
 }
 
@@ -51,13 +50,8 @@ Chromosome::recombine(const Chromosome* other)
   assert(is_valid());
   assert(other->is_valid());
 
-  uniform_int_distribution<int> distribution(0, get_ordering().size());
-  default_random_engine generator(rand());
-
-  int a = distribution(generator), b = distribution(generator);
-  auto child_1 = create_crossover_child(this, other, a, b);
-  int c = distribution(generator), d = distribution(generator);
-  auto child_2 = create_crossover_child(this, other, c, d);
+  auto child_1 = create_crossover_child(this, other, generator_(), generator_());
+  auto child_1 = create_crossover_child(this, other, generator_(), generator_());
   pair<Chromosome*, Chromosome*> offspring (child_1, child_2);
   return offspring;
 }
@@ -77,7 +71,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
   unsigned i = 0, j = 0;
 
   for ( ; i < p1->order_.size() && j < p2->order_.size(); ++i) {
-    if (i >= b && i < e) {
+    if (i >= b and i < e) {
       child->order_[i] = p1->order_[i];
     }
     else { // Increment j as long as its value is in the [b,e) range of p1
@@ -101,7 +95,7 @@ Chromosome::get_fitness() const
 {
   double dist = calculate_total_distance();
   assert(dist > 0);
-  return(10000 / dist); //smaller the distance is, the larger its fitness will be
+  return(1 / dist); //smaller the distance is, the larger its fitness will be
 }
 
 // A Chromosome is valid if it has no repeated values in its permutation,
