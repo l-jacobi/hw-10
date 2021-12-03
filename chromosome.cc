@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cassert>
 #include <random>
+#include <chrono>
+#include <random>
 
 #include "chromosome.hh"
 
@@ -16,14 +18,15 @@ Cities::permutation_t range(int num); //helper function to find the range of a n
 // Generate a completely random permutation from a list of cities
 Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
-    order_(random_permutation(cities_ptr->size())),
-    generator_(rand())
+    order_(random_permutation(cities_ptr->size()))
 {
   /*std::cout << "chromosome initialized, city order: " << std:: endl;
   for(unsigned int i : order_){
 	  std:: cout << i << ", ";
   }
   std::cout << std::endl;*/
+  std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+  generator_ = generator;
   assert(is_valid());
 }
 
