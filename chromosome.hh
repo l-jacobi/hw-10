@@ -64,7 +64,16 @@ class Chromosome {
     return order_;
   }
 
+<<<<<<< HEAD
   int get_order_size() { return order_.size(); } 
+=======
+  void print_order()
+  {
+    for(auto i: order_){
+      std::cout<<i<<std::endl;
+    }
+  }
+>>>>>>> c150d686d669d8c659f44e2dd5f27d4d3e066813
 
  protected:
   // For an ordered set of parents, return a child using the ordered crossover.

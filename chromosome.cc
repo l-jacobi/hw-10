@@ -19,6 +19,11 @@ Chromosome::Chromosome(const Cities* cities_ptr)
     order_(random_permutation(cities_ptr->size())),
     generator_(rand())
 {
+  /*std::cout << "chromosome initialized, city order: " << std:: endl;
+  for(unsigned int i : order_){
+	  std:: cout << i << ", ";
+  }
+  std::cout << std::endl;*/
   assert(is_valid());
 }
 
@@ -98,7 +103,7 @@ Chromosome::get_fitness() const
 {
   double dist = calculate_total_distance();
   assert(dist > 0);
-  return(1 / dist); //smaller the distance is, the larger its fitness will be
+  return(1000 / dist); //smaller the distance is, the larger its fitness will be
 }
 
 // A Chromosome is valid if it has no repeated values in its permutation,
