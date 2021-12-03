@@ -90,7 +90,7 @@ random_permutation(unsigned len)
   int end = len-1;
   //following 2 lines borrowed from a StackOverflow user: see README of hw 09
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  static std::default_random_engine generator (seed);
+  static std::default_random_engine generator(seed);
   std::uniform_int_distribution<unsigned int> distribution(0, end);
   while(out.size() != len){
     auto num = distribution(generator);

@@ -7,6 +7,7 @@
 #include "deme.hh"
 #include <algorithm>
 //#include <numeric>
+#include <chrono>
 
 using vec_size_t = std::vector<Chromosome*>::size_type;
 
@@ -21,12 +22,15 @@ Chromosome* mut_decider(std::default_random_engine& generator, Chromosome* chrom
 
 // Generate a Deme of the specified size with all-random chromosomes.
 // Also receives a mutation rate in the range [0-1].
+// Also seeds the generator idk if this is important but i added it
 Deme::Deme(const Cities* cities_ptr, unsigned pop_size, double mut_rate){	std::cout << std::endl << "deme created" << std::endl;
 	for(unsigned i = 0; i < pop_size; ++i){
 		Chromosome* chromosome_ptr = new Chromosome(cities_ptr);
 		pop_.push_back(chromosome_ptr);
 		mut_rate_ = mut_rate;
 	}
+	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+	generator_ = generator;
 }
 
 // Clean up as necessary
