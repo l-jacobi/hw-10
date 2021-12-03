@@ -54,7 +54,7 @@ Chromosome::mutate()
 // Note: this method allocates memory for the new offsprings
 pair<Chromosome*, Chromosome*>
 Chromosome::recombine(const Chromosome* other)
-{	std::cout << std::endl << "recombining" << std::endl;
+{	std::cout << std::endl << "####recombining" << std::endl;
   assert(is_valid());
   assert(other->is_valid());
 
@@ -89,6 +89,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
       while (p1->is_in_range(p2->order_[j], b, e)) {
         ++j;
       }
+	  std::cout << "j: " << j << ", p2->order_.size(): " << p2->order_.size() << std::endl;
       assert(j < p2->order_.size());
       child->order_[i] = p2->order_[j];
       j++;
