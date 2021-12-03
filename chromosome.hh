@@ -62,6 +62,8 @@ class Chromosome {
   {
     return order_;
   }
+   
+  int get_order_size(){ return order_.size(); }
 
  protected:
   // For an ordered set of parents, return a child using the ordered crossover.
