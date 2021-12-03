@@ -8,15 +8,11 @@
 #include <algorithm>
 //#include <numeric>
 #include <chrono>
+#include <cassert>
 
 using vec_size_t = std::vector<Chromosome*>::size_type;
 
-Chromosome* mut_decider(double rand, Chromosome* chromosome_ptr, double mut_rate){
-	if(rand < mut_rate){
-		chromosome_ptr->mutate();
-	}
-	return chromosome_ptr;
-}
+Chromosome* mut_decider(double rand, Chromosome* chromosome_ptr, double mut_rate);
 
 //Deme Members
 
@@ -48,9 +44,9 @@ Deme::~Deme(){	std::cout << std::endl << "####deme destroyed" << std::endl;
 // a new pair of chromosomes, which are stored in the Deme.
 // After we've generated pop_size new chromosomes, we delete all the old ones.
 void Deme::compute_next_generation(){	std::cout << std::endl << "####computing next generation" << std::endl; //there are some memory issues here with mut_decider; fix those once the other stuff is fixed
-	for(vec_size_t i = 0; i <= pop_.size() / 2; ++i){
-		Chromosome* parent_1 = mut_decider(generator_() / generator_.max(), select_parent(), mut_rate_);
-		Chromosome* parent_2 = mut_decider(generator_() / generator_.max(), select_parent(), mut_rate_);
+	for(vec_size_t i = 1; i <= pop_.size() / 2; ++i){
+		Chromosome* parent_1 = mut_decider(double(generator_()) / double(generator_.max()), select_parent(), mut_rate_);
+		Chromosome* parent_2 = mut_decider(double(generator_()) / double(generator_.max()), select_parent(), mut_rate_);
 
 		//parent_1->recombine(parent_2);
 		std::pair<Chromosome*, Chromosome*> children = parent_1->recombine(parent_2);
@@ -59,6 +55,17 @@ void Deme::compute_next_generation(){	std::cout << std::endl << "####computing n
 		parent_1 = children.first;
 		parent_2 = children.second;
 	}
+}
+
+Chromosome* mut_decider(double rand, Chromosome* chromosome_ptr, double mut_rate){ std::cout << std::endl << "####mut_deciding" << std::endl;
+	if(true /*rand < mut_rate*/){
+//		std::cout << "rand: " << rand << ", mut_rate: " << mut_rate << std::endl;
+		chromosome_ptr->mutate();
+		std::cout << "mutating went ok :)" << std::endl;
+	}else{
+		std::cout << "not mutating" << std::endl;
+	}
+	return chromosome_ptr;
 }
 
 // Return a copy of the chromosome with the highest fitness.
@@ -78,6 +85,7 @@ const Chromosome* Deme::get_best() const{ std::cout << std::endl << "####getting
 			}
 		}
 	}
+	assert(best);
 	return best;
 }
 
@@ -88,26 +96,26 @@ Chromosome* Deme::select_parent(){	std::cout << std::endl << "####selecting pare
 
 	std::cout << "fitness: " << pop_[0]->get_fitness();
 	fps_table[0] = pop_[0]->get_fitness();	//initialize first value as fitness of first cromosome
-	std::cout << ", putting into table as " << fps_table[0] << std::endl;
+	std::cout << ", put into table as " << fps_table[0] << std::endl;
 	for(vec_size_t i = 1; i < pop_.size(); ++i){
 		std::cout << "fitness: " << pop_[i]->get_fitness();
 		fps_table[i] = fps_table[i-1] + pop_[i]->get_fitness();	//each chromosome "takes up" the amount of "space" proportionate to their fitness
-		std::cout << ", putting into table as " << fps_table[i] << std::endl;
+		std::cout << ", put into table as " << fps_table[i] << std::endl;
 	}
 
 	//int rand = generator_() % *(fps_table.end() - 1); //number between 0 and the sum of all fitnesses, i.e. the value of the last element	//the right side of the % operator is a little cursed
 	//bad code ^
 
-	vec_size_t rand(generator_() % fps_table[fps_table.size() - 1]); //number between 0 and the sum of all fitnesses, i.e. the value of the last element
+	vec_size_t rand = (generator_() % fps_table[fps_table.size() - 1]); //number between 0 and the sum of all fitnesses, i.e. the value of the last element
 	std::cout << "selector: " << rand << std::endl;
-	//int rand = generator_();							std::cout << "rand: " << rand << std::endl;
-	//auto max_size = fps_table[fps_table.size() - 1];	std::cout << "max_size: " << max_size << std::endl;
-	//rand = rand % max_size;
 
 	int i = 0;	// the place of the chromosome in which
 	while(fps_table[i] < rand){	//iterates through the table until the random value is within the "space" of the chromosome's fitness on the table
+		std::cout << "i: " << i << ", table value: " << fps_table[i] << std::endl;
 		++i;
 	}
-	++i;	// sets i to the first chromosome with a fitness space larger than the random number
+	std::cout << "today's lucky chromosome is " << i << " with fps table value " << fps_table[i] << std::endl;
+//	if(i == int(fps_table.size() - 1)){ std::cout << "#####################congratulations bitch! you fixed the problem##########" << std::endl; }
+	assert(pop_[i]);
 	return pop_[i];
 }

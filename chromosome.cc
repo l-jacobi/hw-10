@@ -20,7 +20,7 @@ Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
     order_(random_permutation(cities_ptr->size()))
 {
-  std::cout << std::endl << "chromosome initialized, city order: " << std:: endl;
+  std::cout << std::endl << "chromosome initialized, city order: ";
   for(unsigned int i : order_){
 	  std:: cout << i << ", ";
   }
@@ -41,7 +41,7 @@ Chromosome::~Chromosome()
 // Perform a single mutation on this chromosome
 void
 Chromosome::mutate()
-{
+{	std::cout << std::endl << "####mutating" << std::endl;
   assert(is_valid());
 
   unsigned pos1 = generator_() % order_.size();
@@ -54,7 +54,7 @@ Chromosome::mutate()
 // Note: this method allocates memory for the new offsprings
 pair<Chromosome*, Chromosome*>
 Chromosome::recombine(const Chromosome* other)
-{
+{	std::cout << std::endl << "recombining" << std::endl;
   assert(is_valid());
   assert(other->is_valid());
 
