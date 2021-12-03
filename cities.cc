@@ -41,7 +41,7 @@ Cities::reorder(const permutation_t& ordering) const
 // For a given permutation of the cities in this object,
 // compute how long (distance) it would take to traverse all the cities in the
 // order of the permutation, and then returning to the first city.
-// The distance between any two cities is computed as the Euclidean
+// The distance between any two cities is computed as the Euclidean 
 // distance on a plane between their coordinates.
 double
 Cities::total_path_distance(const permutation_t& ord) const
@@ -88,17 +88,10 @@ random_permutation(unsigned len)
   assert(int(len) > 0);
   Cities::permutation_t out;
   int end = len-1;
-<<<<<<< HEAD
-  //following 2 lines borrowed from a StackOverflow user: see README
-  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-  static default_random_engine generator (seed);
-  uniform_int_distribution<unsigned int> distribution(0, end);
-=======
   //following 2 lines borrowed from a StackOverflow user: see README of hw 09
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   static std::default_random_engine generator(seed);
   std::uniform_int_distribution<unsigned int> distribution(0, end);
->>>>>>> c150d686d669d8c659f44e2dd5f27d4d3e066813
   while(out.size() != len){
     auto num = distribution(generator);
     if(count(out.begin(), out.end(), num) == 0){
@@ -107,3 +100,5 @@ random_permutation(unsigned len)
   }
   return out;
 }
+
+
