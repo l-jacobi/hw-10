@@ -90,14 +90,32 @@ const Chromosome* Deme::get_best() const{
 // Randomly select a chromosome in the population based on fitness and
 // return a pointer to that chromosome.
 Chromosome* Deme::select_parent(){
+	unsigned fit_sum = 0;
+	for(Chromosome* chrom : pop_){
+		fit_sum += chrom->get_fitness();
+	}
+	unsigned long selector = generator_() & fit_sum;
+	unsigned long fit_check = 0;
+	int i = 0;
+	for(; fit_check < selector; ++i){
+		fit_check += pop_[i]->get_fitness();
+	}
+	++i;
+	return pop_[i];
+}
+
+/*
 	std::vector<vec_size_t> fps_table(pop_.size());	//table for fitness proportionate selection
 
 	fps_table[0] = pop_[0]->get_fitness();	//initialize first value as fitness of first cromosome
 	for(vec_size_t i = 1; i < pop_.size(); ++i){
 		fps_table[i] = fps_table[i-1] + pop_[i]->get_fitness();	//each chromosome "takes up" the amount of "space" proportionate to their fitness
 	}
-
-	vec_size_t rand = (generator_() % fps_table[fps_table.size() - 1]); //number between 0 and the sum of all fitnesses, i.e. the value of the last element
+	unsigned gend = generator_(); 						std::cout << "gend: " << gend << std::endl;
+														std::cout << "t size: " << fps_table.size() << std::endl;
+	unsigned max = fps_table[fps_table.size() - 1];		std::cout << "max: " << max << std::endl;
+	//vec_size_t rand = (unsigned(generator_()) % unsigned(fps_table[fps_table.size() - 1])); //number between 0 and the sum of all fitnesses, i.e. the value of the last element
+	vec_size_t rand(gend % max);
 
 	int i = 0;
 	while(fps_table[i] < rand){	//iterates through the table until the random value is within the "space" of the chromosome's fitness on the table
@@ -105,4 +123,30 @@ Chromosome* Deme::select_parent(){
 	}
 	assert(pop_[i]);
 	return pop_[i];
+}*/
+/*
+using namespace std;
+Chromosome* Deme::select_parent()
+{
+  double sum = 0, partial_sum = 0;
+  for(auto chromo: pop_){
+    sum += chromo->get_fitness();
+  }
+  uniform_int_distribution<int> distr(0, sum);
+
+  int benchmark = distr(generator_);
+
+  for(auto chromo: pop_)
+  {
+    assert(chromo);
+    double fitness = chromo->get_fitness();
+    if(partial_sum + fitness < benchmark){
+		partial_sum += fitness; }
+    else{
+      auto order = chromo->get_ordering();
+
+      return chromo;
+    }
+  }
 }
+*/
