@@ -89,7 +89,7 @@ Chromosome::create_crossover_child(const Chromosome* p1, const Chromosome* p2,
       while (p1->is_in_range(p2->order_[j], b, e)) {
         ++j;
       }
-	  std::cout << "j: " << j << ", p2->order_.size(): " << p2->order_.size() << std::endl;
+//	  std::cout << "j: " << j << ", p2->order_.size(): " << p2->order_.size() << std::endl;
       assert(j < p2->order_.size());
       child->order_[i] = p2->order_[j];
       j++;
@@ -128,7 +128,7 @@ bool
 Chromosome::is_in_range(unsigned value, unsigned begin, unsigned end) const
 {
   assert(end < order_.size());
-  for(unsigned i = begin; i <= end; ++i){
+  for(unsigned i = begin; i < end; ++i){
     if(order_[i] == value) { return true; }
   }
   return false;
