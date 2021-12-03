@@ -47,6 +47,26 @@ Deme::~Deme(){	std::cout << std::endl << "####deme destroyed" << std::endl;
 // a new pair of chromosomes, which are stored in the Deme.
 // After we've generated pop_size new chromosomes, we delete all the old ones.
 void Deme::compute_next_generation(){	std::cout << std::endl << "####computing next generation" << std::endl;
+	std::vector< std::pair<Chromosome*,Chromosome*> > chrom_pairs;
+	for(vec_size_t i = 0; i < pop_.size() / 2; i++){
+		chrom_pairs.push_back(std::pair<Chromosome*, Chromosome*>(select_parent(), select_parent()));
+	}
+	for(std::pair<Chromosome*, Chromosome*> pair : chrom_pairs){
+		mut_decider(frac(generator_), pair.first, mut_rate_);
+		mut_decider(frac(generator_), pair.second, mut_rate_);
+		pair = pair.first->recombine(pair.second);
+		pop_.push_back(pair.first);
+		pop_.push_back(pair.second);
+	}
+	int half_pop_size = pop_.size() / 2;
+	for(int i = 0; i < half_pop_size; i++){
+		delete pop_[0];
+		pop_.erase(pop_.begin());
+	}
+
+
+
+/*
 		Chromosome* parent_1 = mut_decider(frac(generator_), select_parent(), mut_rate_);
 		Chromosome* parent_2 = mut_decider(frac(generator_), select_parent(), mut_rate_);
 
@@ -60,6 +80,7 @@ void Deme::compute_next_generation(){	std::cout << std::endl << "####computing n
 		parent_2 = children.second;
 		std::cout << "parent 1: " << parent_1 << ", parent 2: " << parent_2 << std::endl;
 		assert(parent_1 && parent_2);
+*/
 }
 
 Chromosome* mut_decider(double rand, Chromosome* chromosome_ptr, double mut_rate){ std::cout << std::endl << "####mut_deciding" << std::endl;
@@ -79,7 +100,9 @@ const Chromosome* Deme::get_best() const{ std::cout << std::endl << "####getting
 	Chromosome* best = pop_[0];
 	if(pop_.size() > 1){
 		double best_fitness = best->get_fitness();
+		std::cout << "pop_ size " << pop_.size() << std::endl;
 		for(vec_size_t i = 1; i < pop_.size(); ++i){
+			std::cout << "checking " << i << std::endl;
 			if(pop_[i]->get_fitness() > best_fitness){
 				best = pop_[i];
 				best_fitness = best->get_fitness();
