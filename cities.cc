@@ -6,6 +6,8 @@
 #include <fstream>
 #include <numeric>
 #include <random>
+#include <chrono>
+#include <cassert>
 
 #include "cities.hh"
 
@@ -87,9 +89,9 @@ random_permutation(unsigned len)
   Cities::permutation_t out;
   int end = len-1;
   //following 2 lines borrowed from a StackOverflow user: see README
-  unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-  static default_random_engine generator (seed);
-  uniform_int_distribution<unsigned int> distribution(0, end);
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  static std::default_random_engine generator (seed);
+  std::uniform_int_distribution<unsigned int> distribution(0, end);
   while(out.size() != len){
     auto num = distribution(generator);
     if(count(out.begin(), out.end(), num) == 0){
