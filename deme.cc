@@ -71,14 +71,10 @@ Chromosome* mut_decider(double rand, Chromosome* chromosome_ptr, double mut_rate
 // Return a copy of the chromosome with the highest fitness.
 // ^ This is literally impossible, the chromosome.hh implementation we were given deletes the copy and assignment constructor. I'm going with the moodle instructions, which say to return a pointer to the best chromosome.
 const Chromosome* Deme::get_best() const{ std::cout << std::endl << "####getting best" << std::endl;
-	//return std::max_element(/*construct an array of the get_fitness of eawch element of pop_*/)
-	//not sure if this ^ would be faster or slower; I'll compare later if I have time
-
 	Chromosome* best = pop_[0];
-	//for(chromosome_ptr_t chromosome_ptr : pop_){ //more spicy code i can't use
 	if(pop_.size() > 1){
-		double best_fitness = best->get_fitness();	//saves on computing the fitness of the current best option every time they're compared later
-		for(vec_size_t i = 1; i < pop_.size(); ++i){	//is it faster to assign pop_.size() to a variable so i don't have to access it like this? i checked the implementation for vectors and it's calculated by subtraction of the begin and end iterators
+		double best_fitness = best->get_fitness();
+		for(vec_size_t i = 1; i < pop_.size(); ++i){
 			if(pop_[i]->get_fitness() > best_fitness){
 				best = pop_[i];
 				best_fitness = best->get_fitness();
@@ -103,15 +99,12 @@ Chromosome* Deme::select_parent(){	std::cout << std::endl << "####selecting pare
 		std::cout << ", put into table as " << fps_table[i] << std::endl;
 	}
 
-	//int rand = generator_() % *(fps_table.end() - 1); //number between 0 and the sum of all fitnesses, i.e. the value of the last element	//the right side of the % operator is a little cursed
-	//bad code ^
-
 	vec_size_t rand = (generator_() % fps_table[fps_table.size() - 1]); //number between 0 and the sum of all fitnesses, i.e. the value of the last element
 	std::cout << "selector: " << rand << std::endl;
 
-	int i = 0;	// the place of the chromosome in which
+	int i = 0;
 	while(fps_table[i] < rand){	//iterates through the table until the random value is within the "space" of the chromosome's fitness on the table
-		std::cout << "i: " << i << ", table value: " << fps_table[i] << std::endl;
+//		std::cout << "i: " << i << ", table value: " << fps_table[i] << std::endl;
 		++i;
 	}
 	std::cout << "today's lucky chromosome is " << i << " with fps table value " << fps_table[i] << std::endl;
