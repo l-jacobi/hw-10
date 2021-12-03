@@ -11,8 +11,8 @@
 
 using vec_size_t = std::vector<Chromosome*>::size_type;
 
-Chromosome* mut_decider(std::default_random_engine& generator, Chromosome* chromosome_ptr, double mut_rate){
-	if(generator.max() / generator() < mut_rate){
+Chromosome* mut_decider(double rand, Chromosome* chromosome_ptr, double mut_rate){
+	if(rand < mut_rate){
 		chromosome_ptr->mutate();
 	}
 	return chromosome_ptr;
@@ -49,8 +49,8 @@ Deme::~Deme(){	std::cout << std::endl << "####deme destroyed" << std::endl;
 // After we've generated pop_size new chromosomes, we delete all the old ones.
 void Deme::compute_next_generation(){	std::cout << std::endl << "####computing next generation" << std::endl; //there are some memory issues here with mut_decider; fix those once the other stuff is fixed
 	for(vec_size_t i = 0; i <= pop_.size() / 2; ++i){
-		Chromosome* parent_1 = mut_decider(generator_, select_parent(), mut_rate_);
-		Chromosome* parent_2 = mut_decider(generator_, select_parent(), mut_rate_);
+		Chromosome* parent_1 = mut_decider(generator_() / generator_.max(), select_parent(), mut_rate_);
+		Chromosome* parent_2 = mut_decider(generator_() / generator_.max(), select_parent(), mut_rate_);
 
 		//parent_1->recombine(parent_2);
 		std::pair<Chromosome*, Chromosome*> children = parent_1->recombine(parent_2);

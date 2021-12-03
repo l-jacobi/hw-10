@@ -20,7 +20,7 @@ Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
     order_(random_permutation(cities_ptr->size()))
 {
-  std::cout << "chromosome initialized, city order: " << std:: endl;
+  std::cout << std::endl << "chromosome initialized, city order: " << std:: endl;
   for(unsigned int i : order_){
 	  std:: cout << i << ", ";
   }
