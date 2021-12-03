@@ -95,7 +95,7 @@ Chromosome::get_fitness() const
 {
   double dist = calculate_total_distance();
   assert(dist > 0);
-  return(1 / dist); //smaller the distance is, the larger its fitness will be
+  return(1000 / dist); //smaller the distance is, the larger its fitness will be
 }
 
 // A Chromosome is valid if it has no repeated values in its permutation,
