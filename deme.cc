@@ -85,7 +85,10 @@ const Chromosome* Deme::get_best() const{ std::cout << std::endl << "####getting
 // return a pointer to that chromosome.
 Chromosome* Deme::select_parent(){	std::cout << std::endl << "####selecting parent" << std::endl;
 	std::vector<vec_size_t> fps_table(pop_.size());	//table for fitness proportionate selection
+
+	std::cout << "fitness: " << pop_[0]->get_fitness();
 	fps_table[0] = pop_[0]->get_fitness();	//initialize first value as fitness of first cromosome
+	std::cout << ", putting into table as " << fps_table[0] << std::endl;
 	for(vec_size_t i = 1; i < pop_.size(); ++i){
 		std::cout << "fitness: " << pop_[i]->get_fitness();
 		fps_table[i] = fps_table[i-1] + pop_[i]->get_fitness();	//each chromosome "takes up" the amount of "space" proportionate to their fitness

@@ -20,11 +20,11 @@ Chromosome::Chromosome(const Cities* cities_ptr)
   : cities_ptr_(cities_ptr),
     order_(random_permutation(cities_ptr->size()))
 {
-  /*std::cout << "chromosome initialized, city order: " << std:: endl;
+  std::cout << "chromosome initialized, city order: " << std:: endl;
   for(unsigned int i : order_){
 	  std:: cout << i << ", ";
   }
-  std::cout << std::endl;*/
+  std::cout << std::endl;
   std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
   generator_ = generator;
   assert(is_valid());
