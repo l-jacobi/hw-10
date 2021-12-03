@@ -14,6 +14,7 @@
 #include <random>
 #include <vector>
 #include <utility>
+#include <iostream>
 
 class Chromosome {
    // Disable public copying of objects for polymorphism:
@@ -63,6 +64,13 @@ class Chromosome {
     return order_;
   }
 
+  void print_order()
+  {
+    for(auto i: order_){
+      std::cout<<i<<std::endl;
+    }
+  }
+
  protected:
   // For an ordered set of parents, return a child using the ordered crossover.
   // The child will have the same values as p1 in the range [begin,end),
@@ -85,6 +93,6 @@ class Chromosome {
   const Cities* cities_ptr_; // Keep ptr to cities, no need for full copy
   Cities::permutation_t order_;  // The actual permutation of this chromosome
 
-  //static std::default_random_engine generator_; // A random number generator for the various methods
+  static std::default_random_engine generator_; // A random number generator for the various methods
 
 };
