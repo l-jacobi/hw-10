@@ -97,8 +97,9 @@ Chromosome* Deme::select_parent(){
 	unsigned long selector = generator_() & fit_sum;
 	unsigned long fit_check = 0;
 	int i = 0;
-	for(; fit_check < selector; ++i){
+	while(fit_check < selector){
 		fit_check += pop_[i]->get_fitness();
+		++i;
 	}
 	++i;
 	return pop_[i];
