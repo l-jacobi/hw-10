@@ -56,7 +56,7 @@ Chromosome::recombine(const Chromosome* other)
   assert(other->is_valid());
 
   //using gen1 = generator_() % order_.size();
-  //using gen2 = generator_() % other->get_order_size;
+  //using gen2 = generator_() % other->get_order_size();
 
   auto child_1 = create_crossover_child(this, other, generator_() % order_.size(), generator_() % order_.size());
   auto child_2 = create_crossover_child(this, other, generator_() % other->get_order_size, generator_() % other->get_order_size);
