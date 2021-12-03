@@ -7,6 +7,7 @@ The compiler did not agree with the generator_ member that was included in the s
 
 For part 3, a population size of 50 and mutation rate of 0.75 seemed to be a good compromise, generally producing a result between 18-19 in about 35 seconds.
 Note: modifying tsp.cc for this part was a lot more confusing as we would have had to find ways for our original code to agree with what Eitan had written. So, I just made randomized.tsv using our code from HW9, since I knew that would work, and then moved it into the HW10 folder to make the comparison gif.
+As you can see in the comparison, GA got to a short distance much more quickly (in terms of generations, not necessarily time) but randomized search ultimately found a better result. This was confirmed by multiple trials on 100,000 iterations, with different population sizes and mutation rates.
 
 El: Deme class
 ==============
